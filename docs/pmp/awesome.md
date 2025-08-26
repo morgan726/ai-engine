@@ -10,13 +10,15 @@ git clone https://github.com/tensorflow/tensorflow.git
 
 git clone https://github.com/deepspeedai/DeepSpeed.git
 
-## 1.1 augmentation
+## 1.1 data
 
 git clone https://github.com/Paperspace/DataAugmentationForObjectDetection.git
 
 git clone https://github.com/makcedward/nlpaug.git
 
 git clone https://github.com/AgaMiko/data-augmentation-review.git
+
+git clone https://github.com/CVHub520/X-AnyLabeling.git
 
 ## 1.2 cv
 
@@ -194,12 +196,13 @@ git clone https://github.com/Tencent/ncnn.git
 
 git clone https://github.com/open-mmlab/mmdetection.git
 
+git clone https://github.com/open-mmlab/mmpose.git
+
 ### 3.3.2 paddle
 
 git clone https://github.com/PaddlePaddle/Paddle.git
 
 git clone https://github.com/PaddlePaddle/PaddleOCR.git
-
 
 # 4 develop
 
