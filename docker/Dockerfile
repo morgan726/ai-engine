@@ -140,8 +140,8 @@ USER ai
 # Env
 ENV PATH=/usr/local/cuda-11.4/bin:/usr/local/bin:$PATH
 ENV LD_LIBRARY_PATH=/usr/local/cuda-11.4/lib64:/usr/local/lib:$LD_LIBRARY_PATH
-ENV C_INCLUDE_PATH=/usr/local/include:$C_INCLUDE_PATH
-ENV CPLUS_INCLUDE_PATH=/usr/local/include:$CPLUS_INCLUDE_PATH
+RUN echo "export C_INCLUDE_PATH=/usr/local/include:${C_INCLUDE_PATH:-}" >> ~/.bashrc && \
+    echo "export CPLUS_INCLUDE_PATH=/usr/local/include:${CPLUS_INCLUDE_PATH:-}" >> ~/.bashrc
 WORKDIR /workspace
- 
+
 RUN ["/bin/bash"]
