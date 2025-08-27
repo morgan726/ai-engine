@@ -114,6 +114,12 @@ git clone https://github.com/yfeng95/GAN.git
 
 git clone https://github.com/facebookresearch/DiT.git
 
+### 1.2.7 keypoint
+
+git clone https://github.com/fire717/movenet.pytorch.git
+
+git clone https://github.com/microsoft/human-pose-estimation.pytorch.git
+
 ## 1.3 bm
 
 git clone https://github.com/huggingface/transformers.git
@@ -127,6 +133,8 @@ git clone https://github.com/deepseek-ai/DeepSeek-R1.git
 git clone https://github.com/OpenInterpreter/open-interpreter.git
 
 git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git
+
+git clone https://github.com/hpcaitech/Open-Sora.git
 
 git clone https://github.com/openvla/openvla.git
 
@@ -197,6 +205,8 @@ git clone https://github.com/Tencent/ncnn.git
 git clone https://github.com/open-mmlab/mmdetection.git
 
 git clone https://github.com/open-mmlab/mmpose.git
+
+git clone https://github.com/open-mmlab/mmdeploy.git
 
 ### 3.3.2 paddle
 
