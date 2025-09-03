@@ -286,6 +286,8 @@ git clone https://github.com/opencv/opencv.git
 
 git clone https://github.com/opencv/opencv_contrib.git
 
+git clone https://github.com/openvinotoolkit/cvat
+
 ### 4.2.5 application
 
 git clone https://github.com/feder-cr/Jobs_Applier_AI_Agent_AIHawk.git
