@@ -208,11 +208,15 @@ git clone https://github.com/open-mmlab/mmpose.git
 
 git clone https://github.com/open-mmlab/mmdeploy.git
 
+git clone https://github.com/open-mmlab/mmsegmentation.git
+
 ### 3.3.2 paddle
 
 git clone https://github.com/PaddlePaddle/Paddle.git
 
 git clone https://github.com/PaddlePaddle/PaddleOCR.git
+
+git clone https://github.com/PaddlePaddle/PaddleSeg.git
 
 # 4 develop
 
