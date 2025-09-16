@@ -118,6 +118,8 @@ git clone https://github.com/facebookresearch/MaskFormer.git
 
 git clone https://github.com/VainF/DeepLabV3Plus-Pytorch.git
 
+git clone https://github.com/XuJiacong/PIDNet.git
+
 git clone https://github.com/ChaoningZhang/MobileSAM.git
 
 ### 1.2.5 depth
