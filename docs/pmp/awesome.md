@@ -1,3 +1,9 @@
+# 0 ml
+
+git clone https://github.com/huggingface/transformers.git
+
+git clone https://github.com/hyunwoongko/transformer.git
+
 # 1 ai
 
 ## 1.0 framework
@@ -9,6 +15,12 @@ git clone https://github.com/pytorch/pytorch.git
 git clone https://github.com/tensorflow/tensorflow.git
 
 git clone https://github.com/deepspeedai/DeepSpeed.git
+
+git clone https://github.com/NVIDIA/Megatron-LM.git
+
+git clone https://github.com/langchain-ai/langchain.git
+
+git clone https://github.com/run-llama/llama_index.git
 
 ## 1.1 data
 
@@ -49,6 +61,14 @@ git clone https://github.com/aaron-xichen/pytorch-playground.git
 git clone https://github.com/Cadene/pretrained-models.pytorch.git
 
 git clone https://github.com/weiaicunzai/pytorch-cifar100.git
+
+git clone https://github.com/lucidrains/vit-pytorch.git
+
+git clone https://github.com/mulinmeng/Shuffle-Transformer.git
+
+git clone https://github.com/microsoft/Swin-Transformer.git
+
+git clone https://github.com/Meituan-AutoML/Twins.git
 
 ### 1.2.3 detection
 
@@ -121,10 +141,6 @@ git clone https://github.com/fire717/movenet.pytorch.git
 git clone https://github.com/microsoft/human-pose-estimation.pytorch.git
 
 ## 1.3 bm
-
-git clone https://github.com/huggingface/transformers.git
-
-git clone https://github.com/hyunwoongko/transformer.git
 
 git clone https://github.com/google-deepmind/alphafold.git
 
@@ -290,7 +306,7 @@ git clone https://github.com/opencv/opencv.git
 
 git clone https://github.com/opencv/opencv_contrib.git
 
-git clone https://github.com/openvinotoolkit/cvat
+git clone https://github.com/cvat-ai/cvat.git
 
 ### 4.2.5 application
 
@@ -299,3 +315,7 @@ git clone https://github.com/feder-cr/Jobs_Applier_AI_Agent_AIHawk.git
 # 4.3 system
 
 git clone https://github.com/torvalds/linux.git
+
+git clone https://github.com/ros/ros.git
+
+git clone https://github.com/ros2/ros2.git
