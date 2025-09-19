@@ -98,6 +98,8 @@ git clone https://github.com/meituan/YOLOv6.git
 
 git clone https://github.com/WongKinYiu/yolov7.git
 
+git clone https://github.com/Megvii-BaseDetection/YOLOX.git
+
 git clone https://github.com/ultralytics/ultralytics.git
 
 git clone https://github.com/WongKinYiu/yolov9.git
