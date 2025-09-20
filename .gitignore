@@ -1,5 +1,6 @@
 build/
 .vscode/
+.cache
 python/alg/ml/supervised/nn/.vector_cache/
 
 *.h5

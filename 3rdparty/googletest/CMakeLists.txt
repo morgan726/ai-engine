@@ -46,8 +46,7 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
 # ${gtest_BINARY_DIR}.
 # Language "C" is required for find_package(Threads).
 project(gtest CXX C)
-cmake_minimum_required(VERSION 2.6.2)
-
+# cmake_minimum_required(VERSION 2.6.2)
 if (COMMAND set_up_hermetic_build)
   set_up_hermetic_build()
 endif()
