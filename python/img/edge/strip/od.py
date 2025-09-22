@@ -5,10 +5,10 @@ import os
 from esg import get_subpixel_corners_near_vertices, process_gray_image
 model = YOLO("/home/dreame/dmt/data/nvme7/alg/cv/detection/ultralytics/runs/train/exp17/weights/best.pt")  
 checkpoint = "/home/dreame/dmt/data/nvme7/code/toolbox/mm/mmpose/work_dirs/rtmpose-m-corner/best_PCK_epoch_150.pth"
-# input_folder = "/home/dreame/dmt/program/project/apriltagone-MOVA3000_two_rect/data/"  # 输入图像文件夹
-input_folder = "/home/dreame/dmt/program/data/dataset-0918"
+input_folder = "/home/dreame/dmt/program/project/apriltagone-MOVA3000_two_rect/data/"  # 输入图像文件夹
+# input_folder = "/home/dreame/dmt/program/data/dataset-0918"
 output_folder = "/home/dreame/dmt/data/nvme7/dataset/pose/strip/result1"  # 可视化结果文件夹
-output_folder2 = "/home/dreame/dmt/data/nvme7/dataset/pose/strip/result3" 
+output_folder2 = "/home/dreame/dmt/data/nvme7/dataset/pose/strip/result2" 
 config = "/home/dreame/dmt/data/nvme7/code/toolbox/mm/mmpose/data/rtmpose-m-corner.py"
 os.makedirs(output_folder, exist_ok=True)
 os.makedirs(output_folder2, exist_ok=True)
@@ -127,13 +127,13 @@ for filename in os.listdir(input_folder):
                 
                 if has_duplicate_keypoints(keypoints_np):
                     print(keypoints)
-                    boxes, result, gray_image = process_gray_image(output_image)
-                    if boxes is None or result is None or gray_image is None or len(boxes) != 2:
+                    # boxes, result, gray_image = process_gray_image(output_image)
+                    # if boxes is None or result is None or gray_image is None or len(boxes) != 2:
                         # cv2.rectangle(result, box[0], box[2], (0, 255, 0), 2)
-                        for box in boxes:
-                            subpix_corners = get_subpixel_corners_near_vertices(gray_image,box)
-                            for (x, y) in subpix_corners:
-                                cv2.circle(output_image, (int(round(x)), int(round(y))), 1, (0, 0, 255), -1)
+                        # for box in boxes:
+                    subpix_corners = get_subpixel_corners_near_vertices(image,box)
+                    for (x, y) in subpix_corners:
+                        cv2.circle(output_image, (int(round(x)), int(round(y))), 1, (0, 0, 255), -1)
                 #print(f"关键点数量: {len(keypoints_np)}")
                 
                 

@@ -10,57 +10,103 @@ def normalize_coords(x, y, img_w, img_h):
     return np.clip(norm_x, 0.0, 1.0), np.clip(norm_y, 0.0, 1.0)
 
 
-def get_subpixel_corners_near_vertices(gray_img, box, search_radius=5):
-    """在矩形框四个顶点附近搜索并提取亚像素级角点"""
+import cv2
+import numpy as np
+
+def get_subpixel_corners_near_vertices(image, box, search_radius=5):
+    """在每个顶点的搜索区域内使用自适应阈值，更精准地检测白色角点"""
     clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
+    gray_img = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     gray_img = clahe.apply(gray_img)
+    
     subpix_corners = []
-    # 遍历矩形框的四个顶点
-    # print(box)
     for (x, y) in box:
-        # 1. 确定顶点附近的搜索区域
+        # 1. 确定当前顶点的局部搜索区域
         x_start = max(0, x - search_radius)
         x_end = min(gray_img.shape[1], x + search_radius + 1)
         y_start = max(0, y - search_radius)
         y_end = min(gray_img.shape[0], y + search_radius + 1)
         
-        # 2. 提取搜索区域的ROI
-        roi = gray_img[y_start:y_end, x_start:x_end]
-        if roi.size == 0:
+        # 提取局部ROI
+        roi_gray = gray_img[y_start:y_end, x_start:x_end]
+        if roi_gray.size == 0:
             continue
         
-        # 3. 在ROI内检测初始角点
+        # 2. 在局部ROI内计算自适应阈值（仅针对当前区域）
+        # 方法1：使用Otsu阈值（适合局部黑白分明的区域）
+        # _, local_mask = cv2.threshold(roi_gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+        
+        # 方法2（可选）：使用自适应阈值（适合光照不均匀的区域）
+        local_mask = cv2.adaptiveThreshold(
+            roi_gray, 255, 
+            cv2.ADAPTIVE_THRESH_GAUSSIAN_C, 
+            cv2.THRESH_BINARY, 
+            11, 2  # 块大小和常数项
+        )
+        
+        # 局部mask优化
+        kernel = np.ones((2, 2), np.uint8)
+        local_mask = cv2.morphologyEx(local_mask, cv2.MORPH_CLOSE, kernel)
+        local_mask = cv2.morphologyEx(local_mask, cv2.MORPH_OPEN, kernel)
+        
+        # 3. 合并灰度和局部mask信息
+        combined_roi = roi_gray.copy()
+        combined_roi[local_mask == 0] = 0  # 只保留局部白色区域
+        
+        # 4. 检测角点
         corners = cv2.goodFeaturesToTrack(
-            roi,
-            maxCorners=5,
+            combined_roi,
+            maxCorners=1,
             qualityLevel=0.001,
-            minDistance=3,
+            minDistance=2,  # 局部区域较小，缩小最小距离
             blockSize=3
         )
-        if corners is None:
-            continue
-        
-        # 4. 转换ROI内的角点坐标到原图坐标
-        corners = np.int32(corners).reshape(-1, 2)
-        corners = [(cx + x_start, cy + y_start) for (cx, cy) in corners]
-        
-        # 5. 找到距离原始顶点最近的角点
-        corners_with_dist = [((cx - x)**2 + (cy - y)** 2, cx, cy) for (cx, cy) in corners]
-        corners_with_dist.sort()
-        nearest_corner = (corners_with_dist[0][1], corners_with_dist[0][2])
-        
-        # 6. 亚像素级细化
-        criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
-        subpix = cv2.cornerSubPix(
-            gray_img,
-            np.float32([nearest_corner]),
-            (2, 2),
-            (-1, -1),
-            criteria
-        )
-        subpix_corners.append(subpix[0])
-    
+
+        if corners is not None and len(corners) > 0:
+            # 转换坐标到原图
+            corners = np.int32(corners).reshape(-1, 2)
+            corners = [(cx + x_start, cy + y_start) for (cx, cy) in corners]
+            
+            # 找到离原始顶点最近的角点
+            corners_with_dist = [((cx - x)**2 + (cy - y)**2, cx, cy) for (cx, cy) in corners]
+            corners_with_dist.sort()
+            nearest_corner = (corners_with_dist[0][1], corners_with_dist[0][2])
+            
+            # 亚像素级细化
+            criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
+            subpix = cv2.cornerSubPix(
+                gray_img,
+                np.float32([nearest_corner]),
+                (2, 2),
+                (-1, -1),
+                criteria
+            )
+            subpix_corners.append(subpix[0])
+        else:
+            # 检测不到角点时，使用局部区域的白色区域顶点
+            # 找到局部mask的轮廓
+            contours, _ = cv2.findContours(local_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+            if contours:
+                largest_contour = max(contours, key=cv2.contourArea)
+                # 转换轮廓坐标到原图
+                largest_contour = largest_contour + np.array([[x_start, y_start]])
+                # 拟合矩形
+                rect = cv2.minAreaRect(largest_contour)
+                box_pts = cv2.boxPoints(rect)
+                box_pts = np.int0(box_pts)
+                
+                # 找离当前顶点最近的点
+                pts_with_dist = [((pt[0] - x)**2 + (pt[1] - y)** 2, pt[0], pt[1]) for pt in box_pts]
+                pts_with_dist.sort()
+                nearest_pt = (pts_with_dist[0][1], pts_with_dist[0][2])
+                subpix_corners.append(np.array(nearest_pt, dtype=np.float32))
+            else:
+                #  fallback：使用原始顶点
+                subpix_corners.append(np.array([x, y], dtype=np.float32))
+
     return np.array(subpix_corners, dtype=np.float32)
+
+
 
 
 def process_gray_image(image):

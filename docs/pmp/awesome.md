@@ -132,11 +132,25 @@ git clone https://github.com/DepthAnything/Depth-Anything-V2.git
 
 git clone https://github.com/mrharicot/monodepth.git
 
+git clone https://github.com/nianticlabs/monodepth2.git
+
+git clone https://github.com/isl-org/MiDaS.git
+
+git clone https://github.com/isl-org/ZoeDepth.git
+
+git clone https://github.com/lpiccinelli-eth/UniDepth.git
+
+git clone https://github.com/apple/ml-depth-pro.git
+
+git clone https://github.com/aim-uofa/AdelaiDepth.git
+
 ### 1.2.6 generation
 
 git clone https://github.com/yfeng95/GAN.git
 
 git clone https://github.com/facebookresearch/DiT.git
+
+git clone https://github.com/junyanz/CycleGAN.git
 
 ### 1.2.7 keypoint
 
