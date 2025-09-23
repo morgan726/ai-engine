@@ -97,18 +97,19 @@ for filename in os.listdir(input_folder):
         image = cv2.imread(image_path)
         output_image = image.copy()
         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
         img_height, img_width = image.shape[:2]
         if image is None:
             print("无法读取图像，请检查路径！")
             exit()
-
+        
         # 执行目标检测
         results = model(image)[0]  # 获取检测结果
         objs = get_centermost_boxes(results.boxes.data.tolist(),img_width,img_height)
         for box in objs:
             x1, y1 = box[0]
             x2, y2 = box[2] if len(box) > 2 else box[1]
-            
+            # cv2.rectangle(output_image, box[0], box[2], (0, 255, 0), 2)
             i = i + 1
 
             save_path = os.path.join(output_folder, f"{i}_strip_0818.jpg")
