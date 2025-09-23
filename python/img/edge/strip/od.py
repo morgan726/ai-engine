@@ -3,10 +3,10 @@ import numpy as np
 from ultralytics import YOLO
 import os
 from esg import get_subpixel_corners_near_vertices, process_gray_image
-model = YOLO("/home/dreame/dmt/data/nvme7/alg/cv/detection/ultralytics/runs/train/exp17/weights/best.pt")  
-checkpoint = "/home/dreame/dmt/data/nvme7/code/toolbox/mm/mmpose/work_dirs/rtmpose-m-corner/best_PCK_epoch_150.pth"
-input_folder = "/home/dreame/dmt/program/project/apriltagone-MOVA3000_two_rect/data/"  # 输入图像文件夹
-# input_folder = "/home/dreame/dmt/program/data/dataset-0918"
+model = YOLO("/home/dreame/dmt/data/nvme7/alg/cv/detection/ultralytics/runs/train/exp18/weights/best.pt")  
+checkpoint = "/home/dreame/dmt/data/nvme7/code/toolbox/mm/mmpose/work_dirs/rtmpose-m-corner/best_PCK_epoch_230.pth"
+# input_folder = "/home/dreame/dmt/program/project/apriltagone-MOVA3000_two_rect/data/"  # 输入图像文件夹
+input_folder = "/home/dreame/dmt/program/data/dataset-0918"
 output_folder = "/home/dreame/dmt/data/nvme7/dataset/pose/strip/result1"  # 可视化结果文件夹
 output_folder2 = "/home/dreame/dmt/data/nvme7/dataset/pose/strip/result2" 
 config = "/home/dreame/dmt/data/nvme7/code/toolbox/mm/mmpose/data/rtmpose-m-corner.py"
@@ -165,6 +165,6 @@ for filename in os.listdir(input_folder):
             print(i, save_path)
 
         # 保存带有所有关键点的原始图像
-        full_image_save_path = os.path.join(output_folder2, f"{i}_full_image_with_keypoints.jpg")
+        full_image_save_path = os.path.join(output_folder2, filename)
         cv2.imwrite(full_image_save_path, output_image)
         print(f"已保存带有关键点的完整图像: {full_image_save_path}")

@@ -122,6 +122,8 @@ git clone https://github.com/VainF/DeepLabV3Plus-Pytorch.git
 
 git clone https://github.com/XuJiacong/PIDNet.git
 
+git clone https://github.com/facebookresearch/segment-anything.git
+
 git clone https://github.com/ChaoningZhang/MobileSAM.git
 
 ### 1.2.5 depth
@@ -151,6 +153,10 @@ git clone https://github.com/yfeng95/GAN.git
 git clone https://github.com/facebookresearch/DiT.git
 
 git clone https://github.com/junyanz/CycleGAN.git
+
+git clone https://github.com/fcjian/InstaGen.git
+
+git clone https://github.com/sdv-dev/SDV.git
 
 ### 1.2.7 keypoint
 
