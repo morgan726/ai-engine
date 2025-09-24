@@ -36,7 +36,7 @@
         "-DCMAKE_CXX_COMPILER_LAUNCHER=ccache",
         "-DDOWNLOAD_EXTRACT_TIMESTAMP=true"
     ],
-    //"C_Cpp.intelliSenseEngine": "Tag Parser",
+    "C_Cpp.intelliSenseEngine": "Tag Parser",
     "[python]": {
         "editor.defaultFormatter": "ms-python.black-formatter",
         "editor.formatOnSave": true
@@ -115,7 +115,12 @@
         "variant": "cpp",
         "hash_map": "cpp",
         "hash_set": "cpp",
-        "valarray": "cpp"
+        "valarray": "cpp",
+        "compare": "cpp",
+        "concepts": "cpp",
+        "numbers": "cpp",
+        "semaphore": "cpp",
+        "stop_token": "cpp"
     },
     "python-envs.defaultEnvManager": "ms-python.python:conda",
     "python-envs.defaultPackageManager": "ms-python.python:conda",

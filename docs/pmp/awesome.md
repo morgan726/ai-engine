@@ -172,7 +172,13 @@ git clone https://github.com/deepseek-ai/DeepSeek-R1.git
 
 git clone https://github.com/OpenInterpreter/open-interpreter.git
 
+git clone https://github.com/facebookresearch/dino.git
+
+git clone https://github.com/facebookresearch/dinov3.git
+
 git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git
+
+git clone https://github.com/Stability-AI/generative-models.git
 
 git clone https://github.com/hpcaitech/Open-Sora.git
 
