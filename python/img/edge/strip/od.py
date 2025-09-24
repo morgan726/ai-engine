@@ -3,12 +3,12 @@ import numpy as np
 from ultralytics import YOLO
 import os
 from esg import get_subpixel_corners_near_vertices, process_gray_image
-model = YOLO("/home/dreame/dmt/data/nvme7/alg/cv/detection/ultralytics/runs/train/exp17/weights/best.pt")  
-checkpoint = "/home/dreame/dmt/data/nvme7/code/toolbox/mm/mmpose/work_dirs/rtmpose-m-corner/best_PCK_epoch_150.pth"
+model = YOLO("/home/dreame/dmt/data/nvme7/alg/cv/detection/ultralytics/runs/train/exp18/weights/best.pt")  
+checkpoint = "/home/dreame/dmt/data/nvme7/code/toolbox/mm/mmpose/work_dirs/rtmpose-m-corner/best_PCK_epoch_230.pth"
 # input_folder = "/home/dreame/dmt/program/project/apriltagone-MOVA3000_two_rect/data/"  # 输入图像文件夹
 input_folder = "/home/dreame/dmt/program/data/dataset-0918"
 output_folder = "/home/dreame/dmt/data/nvme7/dataset/pose/strip/result1"  # 可视化结果文件夹
-output_folder2 = "/home/dreame/dmt/data/nvme7/dataset/pose/strip/result3" 
+output_folder2 = "/home/dreame/dmt/data/nvme7/dataset/pose/strip/result2" 
 config = "/home/dreame/dmt/data/nvme7/code/toolbox/mm/mmpose/data/rtmpose-m-corner.py"
 os.makedirs(output_folder, exist_ok=True)
 os.makedirs(output_folder2, exist_ok=True)
@@ -97,18 +97,19 @@ for filename in os.listdir(input_folder):
         image = cv2.imread(image_path)
         output_image = image.copy()
         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
         img_height, img_width = image.shape[:2]
         if image is None:
             print("无法读取图像，请检查路径！")
             exit()
-
+        
         # 执行目标检测
         results = model(image)[0]  # 获取检测结果
         objs = get_centermost_boxes(results.boxes.data.tolist(),img_width,img_height)
         for box in objs:
             x1, y1 = box[0]
             x2, y2 = box[2] if len(box) > 2 else box[1]
-            
+            # cv2.rectangle(output_image, box[0], box[2], (0, 255, 0), 2)
             i = i + 1
 
             save_path = os.path.join(output_folder, f"{i}_strip_0818.jpg")
@@ -127,13 +128,13 @@ for filename in os.listdir(input_folder):
                 
                 if has_duplicate_keypoints(keypoints_np):
                     print(keypoints)
-                    boxes, result, gray_image = process_gray_image(output_image)
-                    if boxes is None or result is None or gray_image is None or len(boxes) != 2:
+                    # boxes, result, gray_image = process_gray_image(output_image)
+                    # if boxes is None or result is None or gray_image is None or len(boxes) != 2:
                         # cv2.rectangle(result, box[0], box[2], (0, 255, 0), 2)
-                        for box in boxes:
-                            subpix_corners = get_subpixel_corners_near_vertices(gray_image,box)
-                            for (x, y) in subpix_corners:
-                                cv2.circle(output_image, (int(round(x)), int(round(y))), 1, (0, 0, 255), -1)
+                        # for box in boxes:
+                    subpix_corners = get_subpixel_corners_near_vertices(image,box)
+                    for (x, y) in subpix_corners:
+                        cv2.circle(output_image, (int(round(x)), int(round(y))), 1, (0, 0, 255), -1)
                 #print(f"关键点数量: {len(keypoints_np)}")
                 
                 
@@ -165,6 +166,6 @@ for filename in os.listdir(input_folder):
             print(i, save_path)
 
         # 保存带有所有关键点的原始图像
-        full_image_save_path = os.path.join(output_folder2, f"{i}_full_image_with_keypoints.jpg")
+        full_image_save_path = os.path.join(output_folder2, filename)
         cv2.imwrite(full_image_save_path, output_image)
         print(f"已保存带有关键点的完整图像: {full_image_save_path}")
