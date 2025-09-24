@@ -158,6 +158,10 @@ git clone https://github.com/hpcaitech/Open-Sora.git
 
 git clone https://github.com/openvla/openvla.git
 
+git clone https://github.com/GengzeZhou/NavGPT
+
+git clone https://github.com/GengzeZhou/NavGPT-2
+
 ## 1.4 nlp
 
 git clone https://github.com/graykode/nlp-tutorial.git
