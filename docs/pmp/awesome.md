@@ -1,8 +1,16 @@
 # 0 ml
 
+git clone https://github.com/josephmisiti/awesome-machine-learning.git
+
+git clone https://github.com/yfeng95/GAN.git
+
 git clone https://github.com/huggingface/transformers.git
 
 git clone https://github.com/hyunwoongko/transformer.git
+
+git clone https://github.com/openai/CLIP.git
+
+git clone https://github.com/microsoft/GLIP.git
 
 # 1 ai
 
@@ -172,10 +180,6 @@ git clone https://github.com/deepseek-ai/DeepSeek-R1.git
 
 git clone https://github.com/OpenInterpreter/open-interpreter.git
 
-git clone https://github.com/facebookresearch/dino.git
-
-git clone https://github.com/facebookresearch/dinov3.git
-
 git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git
 
 git clone https://github.com/Stability-AI/generative-models.git
@@ -184,21 +188,13 @@ git clone https://github.com/hpcaitech/Open-Sora.git
 
 git clone https://github.com/openvla/openvla.git
 
-git clone https://github.com/GengzeZhou/NavGPT
-
-git clone https://github.com/GengzeZhou/NavGPT-2
+git clone https://github.com/coqui-ai/TTS.git
 
 ## 1.4 nlp
 
 git clone https://github.com/graykode/nlp-tutorial.git
 
-## 1.5 ml
-
-git clone https://github.com/josephmisiti/awesome-machine-learning.git
-
-git clone https://github.com/yfeng95/GAN.git
-
-## 1.6 llm
+## 1.5 llm
 
 git clone https://github.com/THUDM/ChatGLM-6B.git
 
@@ -346,7 +342,7 @@ git clone https://github.com/cvat-ai/cvat.git
 
 git clone https://github.com/feder-cr/Jobs_Applier_AI_Agent_AIHawk.git
 
-# 4.3 system
+## 4.3 system
 
 git clone https://github.com/torvalds/linux.git
 

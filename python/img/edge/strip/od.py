@@ -89,11 +89,12 @@ def has_duplicate_keypoints(keypoints, threshold=3.0):
 
 
 i = 0
-sub = 0
+sub = 1
+is_write = False
 for filename in os.listdir(input_folder):
     if filename.endswith(('.jpg', '.jpeg', '.png', '.bmp')):
         image_path = os.path.join(input_folder, filename)
-        print(image_path)
+        # print(image_path)
         image = cv2.imread(image_path)
         output_image = image.copy()
         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -114,9 +115,20 @@ for filename in os.listdir(input_folder):
 
             save_path = os.path.join(output_folder, f"{i}_strip_0818.jpg")
             # cv2.imwrite(save_path,image[y1-sub:y2+sub, x1-sub:x2+sub])
-            cropped_img = image[y1-sub:y2+sub, x1-sub:x2+sub]
-            cv2.imwrite(save_path, cropped_img)
-            
+            h, w = image.shape[:2]
+            x_start = max(0, x1 - sub)
+            x_end = min(w, x2 + sub)
+            y_start = max(0, y1 - sub)
+            y_end = min(h, y2 + sub)
+
+            # 确保裁剪区域有效
+            if x_start < x_end and y_start < y_end:
+                cropped_img = image[y_start:y_end, x_start:x_end]
+                cv2.imwrite(save_path, cropped_img)
+            else:
+                # 裁剪区域无效，跳过保存
+                print(f"无效的裁剪区域: {x_start}:{x_end}, {y_start}:{y_end}")
+                continue
             # 姿态估计
             result = inference_topdown(model_pose, save_path)
             pose_sample = result[0]
@@ -127,27 +139,48 @@ for filename in os.listdir(input_folder):
                 keypoints_np = keypoints[0]  # shape: (N, 2)
                 
                 if has_duplicate_keypoints(keypoints_np):
-                    print(keypoints)
+                    is_write = True
+                    # print(keypoints)
                     # boxes, result, gray_image = process_gray_image(output_image)
                     # if boxes is None or result is None or gray_image is None or len(boxes) != 2:
                         # cv2.rectangle(result, box[0], box[2], (0, 255, 0), 2)
                         # for box in boxes:
-                    subpix_corners = get_subpixel_corners_near_vertices(image,box)
+                    keypoints_original = keypoints_np + np.array([x1 - sub, y1 - sub])  # 裁剪图坐标 -> 原图坐标
+                    subpix_corners = get_subpixel_corners_near_vertices(
+                        image=image,
+                        box=box,
+                        keypoints_np=keypoints_original,  # 传入原图坐标的关键点
+                        search_radius=5  # 可根据目标大小调整扇区半径
+                    )
                     for (x, y) in subpix_corners:
-                        cv2.circle(output_image, (int(round(x)), int(round(y))), 1, (0, 0, 255), -1)
+                        # 标记是否需要绘制当前点
+                        need_draw = True
+                        # 检查所有关键点是否在5像素范围内
+                        for (xk, yk) in keypoints_original:
+                            # 计算像素距离的平方（避免开方运算，提高效率）
+                            dist_sq = (x - xk)**2 + (y - yk)** 2
+                            # 5像素范围内（距离平方 <= 25）
+                            if dist_sq <= 49:
+                                need_draw = False
+                                break  # 找到一个就可以退出检查
+                        # 只有附近没有关键点时才绘制
+                        if need_draw:
+                            cv2.circle(image, (int(round(x)), int(round(y))), 1, (0, 0, 255), -1)
+                else:
+                    is_write = False
                 #print(f"关键点数量: {len(keypoints_np)}")
                 
                 
                 # 在裁剪图像上绘制关键点
-                for (x, y) in keypoints_np:
-                    # 只绘制有效的关键点（排除负坐标）
-                    x = int(x)
-                    y = int(y)
-                    x = max(x, 0)
-                    y = max(y, 0)
-                    x = min(x2 - x1 + 2*sub - 1, x)
-                    y = min(y2 - y1 + 2*sub - 1, y)
-                    cv2.circle(cropped_img, (x, y), 1, (0, 0, 255), -1)
+                # for (x, y) in keypoints_np:
+                #     # 只绘制有效的关键点（排除负坐标）
+                #     x = int(x)
+                #     y = int(y)
+                #     x = max(x, 0)
+                #     y = max(y, 0)
+                #     x = min(x2 - x1 + 2*sub - 1, x)
+                #     y = min(y2 - y1 + 2*sub - 1, y)
+                #     cv2.circle(cropped_img, (x, y), 1, (0, 0, 255), -1)
                 
                 # 在原始图像上绘制关键点（需要转换坐标）
                 for (x, y) in keypoints_np:
@@ -158,14 +191,15 @@ for filename in os.listdir(input_folder):
                     y = max(y, 0)
                     x = min(img_width - 1, x)
                     y = min(img_height - 1, y)
-                    print(output_image.shape,x,y)
-                    cv2.circle(output_image, (x, y), 1, (0, 255, 0), -1)  # 使用不同颜色区分
+                    # print(image.shape,x,y)
+                    cv2.circle(image, (x, y), 1, (0, 255, 0), -1)  # 使用不同颜色区分
 
             # 保存带有关键点的裁剪图像
             cv2.imwrite(save_path, cropped_img)
-            print(i, save_path)
+            # print(i, save_path)
 
         # 保存带有所有关键点的原始图像
         full_image_save_path = os.path.join(output_folder2, filename)
-        cv2.imwrite(full_image_save_path, output_image)
-        print(f"已保存带有关键点的完整图像: {full_image_save_path}")
+        if is_write:
+            cv2.imwrite(full_image_save_path, image)
+            # print(f"已保存带有关键点的完整图像: {full_image_save_path}")
