@@ -40,6 +40,10 @@ git clone https://github.com/AgaMiko/data-augmentation-review.git
 
 git clone https://github.com/CVHub520/X-AnyLabeling.git
 
+git clone https://github.com/cvat-ai/cvat.git
+
+git clone https://github.com/OschAI/VisioFirm.git
+
 ## 1.2 cv
 
 ### 1.2.0 tutorial
@@ -118,6 +122,8 @@ git clone https://github.com/sunsmarterjie/yolov12.git
 
 git clone https://github.com/facebookresearch/detr.git
 
+git clone https://github.com/THU-MIG/yoloe.git
+
 ### 1.2.4 segmentation
 
 git clone https://github.com/matterport/Mask_RCNN.git
@@ -172,6 +178,14 @@ git clone https://github.com/fire717/movenet.pytorch.git
 
 git clone https://github.com/microsoft/human-pose-estimation.pytorch.git
 
+### 1.2.8 3D
+
+git clone https://github.com/charlesq34/pointnet.git
+
+git clone https://github.com/charlesq34/pointnet2.git
+
+git clone https://github.com/sshaoshuai/PointRCNN.git
+
 ## 1.3 bm
 
 git clone https://github.com/google-deepmind/alphafold.git
@@ -187,6 +201,8 @@ git clone https://github.com/Stability-AI/generative-models.git
 git clone https://github.com/hpcaitech/Open-Sora.git
 
 git clone https://github.com/openvla/openvla.git
+
+git clone https://github.com/Physical-Intelligence/openpi.git
 
 git clone https://github.com/coqui-ai/TTS.git
 
@@ -330,15 +346,13 @@ git clone https://github.com/microsoft/STL.git
 
 git clone https://github.com/FFmpeg/FFmpeg.git
 
-### 4.2.4 data
-
 git clone https://github.com/opencv/opencv.git
 
 git clone https://github.com/opencv/opencv_contrib.git
 
-git clone https://github.com/cvat-ai/cvat.git
+git clone https://github.com/PointCloudLibrary/pcl.git
 
-### 4.2.5 application
+### 4.2.4 application
 
 git clone https://github.com/feder-cr/Jobs_Applier_AI_Agent_AIHawk.git
 
