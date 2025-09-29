@@ -90,6 +90,8 @@ git clone https://github.com/rbgirshick/fast-rcnn.git
 
 git clone https://github.com/rbgirshick/py-faster-rcnn.git
 
+git clone https://github.com/aim-uofa/AdelaiDet.git
+
 git clone https://github.com/tanjeffreyz/yolo-v1.git
 
 git clone https://github.com/longcw/yolo2-pytorch.git
@@ -160,6 +162,10 @@ git clone https://github.com/apple/ml-depth-pro.git
 
 git clone https://github.com/aim-uofa/AdelaiDepth.git
 
+git clone https://github.com/XiandaGuo/OpenStereo.git
+
+git clone https://github.com/princeton-vl/RAFT-Stereo.git
+
 ### 1.2.6 generation
 
 git clone https://github.com/yfeng95/GAN.git
@@ -177,6 +183,8 @@ git clone https://github.com/sdv-dev/SDV.git
 git clone https://github.com/fire717/movenet.pytorch.git
 
 git clone https://github.com/microsoft/human-pose-estimation.pytorch.git
+
+git clone https://github.com/orhir/PoseAnything.git
 
 ### 1.2.8 3D
 
@@ -221,6 +229,9 @@ git clone https://github.com/unslothai/unsloth.git
 git clone https://github.com/google/gemma.cpp.git
 
 git clone https://github.com/google/gemma_pytorch.git
+
+## 1.6 rag
+
 
 # 2 code
 
