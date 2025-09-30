@@ -8,6 +8,8 @@ git clone https://github.com/huggingface/transformers.git
 
 git clone https://github.com/hyunwoongko/transformer.git
 
+git clone git clone https://github.com/Dao-AILab/flash-attention
+
 git clone https://github.com/openai/CLIP.git
 
 git clone https://github.com/microsoft/GLIP.git
@@ -194,6 +196,10 @@ git clone https://github.com/charlesq34/pointnet2.git
 
 git clone https://github.com/sshaoshuai/PointRCNN.git
 
+### 1.2.9 sod
+
+git clone https://github.com/xuebinqin/U-2-Net.git
+
 ## 1.3 bm
 
 git clone https://github.com/google-deepmind/alphafold.git
@@ -231,7 +237,6 @@ git clone https://github.com/google/gemma.cpp.git
 git clone https://github.com/google/gemma_pytorch.git
 
 ## 1.6 rag
-
 
 # 2 code
 
@@ -295,7 +300,7 @@ git clone https://github.com/PaddlePaddle/PaddleSeg.git
 
 ## 4.0 env
 
-## 4.0.1 compiler
+### 4.0.1 compiler
 
 git clone https://github.com/Kitware/CMake.git
 
