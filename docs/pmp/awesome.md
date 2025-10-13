@@ -196,9 +196,13 @@ git clone https://github.com/charlesq34/pointnet2.git
 
 git clone https://github.com/sshaoshuai/PointRCNN.git
 
+git clone https://github.com/yanx27/Pointnet_Pointnet2_pytorch.git
+
 ### 1.2.9 sod
 
 git clone https://github.com/xuebinqin/U-2-Net.git
+
+git clone https://github.com/HuCaoFighting/Swin-Unet.git
 
 ## 1.3 bm
 
@@ -220,6 +224,8 @@ git clone https://github.com/Physical-Intelligence/openpi.git
 
 git clone https://github.com/coqui-ai/TTS.git
 
+git clone https://github.com/harry0703/MoneyPrinterTurbo.git
+
 ## 1.4 nlp
 
 git clone https://github.com/graykode/nlp-tutorial.git
@@ -235,6 +241,8 @@ git clone https://github.com/unslothai/unsloth.git
 git clone https://github.com/google/gemma.cpp.git
 
 git clone https://github.com/google/gemma_pytorch.git
+
+git clone https://github.com/QwenLM/Qwen.git
 
 ## 1.6 rag
 
