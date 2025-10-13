@@ -8,7 +8,7 @@ git clone https://github.com/huggingface/transformers.git
 
 git clone https://github.com/hyunwoongko/transformer.git
 
-git clone git clone https://github.com/Dao-AILab/flash-attention
+git clone https://github.com/Dao-AILab/flash-attention
 
 git clone https://github.com/openai/CLIP.git
 
