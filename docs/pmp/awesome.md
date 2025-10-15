@@ -8,7 +8,7 @@ git clone https://github.com/huggingface/transformers.git
 
 git clone https://github.com/hyunwoongko/transformer.git
 
-git clone https://github.com/Dao-AILab/flash-attention
+git clone git clone https://github.com/Dao-AILab/flash-attention
 
 git clone https://github.com/openai/CLIP.git
 
@@ -217,6 +217,8 @@ git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git
 git clone https://github.com/Stability-AI/generative-models.git
 
 git clone https://github.com/hpcaitech/Open-Sora.git
+
+git clone https://github.com/Tencent-Hunyuan/HunyuanImage-3.0.git
 
 git clone https://github.com/openvla/openvla.git
 
