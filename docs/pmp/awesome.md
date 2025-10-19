@@ -248,6 +248,8 @@ git clone https://github.com/fffaraz/awesome-cpp.git
 
 git clone https://github.com/changkun/modern-cpp-tutorial.git
 
+git clone https://github.com/xtaci/algorithms.git
+
 ## 2.2 python
 
 git clone https://github.com/TheAlgorithms/Python.git
