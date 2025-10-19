@@ -8,7 +8,7 @@ git clone https://github.com/huggingface/transformers.git
 
 git clone https://github.com/hyunwoongko/transformer.git
 
-git clone https://github.com/Dao-AILab/flash-attention
+git clone git clone https://github.com/Dao-AILab/flash-attention
 
 git clone https://github.com/openai/CLIP.git
 
@@ -196,9 +196,13 @@ git clone https://github.com/charlesq34/pointnet2.git
 
 git clone https://github.com/sshaoshuai/PointRCNN.git
 
+git clone https://github.com/yanx27/Pointnet_Pointnet2_pytorch.git
+
 ### 1.2.9 sod
 
 git clone https://github.com/xuebinqin/U-2-Net.git
+
+git clone https://github.com/HuCaoFighting/Swin-Unet.git
 
 ## 1.3 bm
 
@@ -214,11 +218,15 @@ git clone https://github.com/Stability-AI/generative-models.git
 
 git clone https://github.com/hpcaitech/Open-Sora.git
 
+git clone https://github.com/Tencent-Hunyuan/HunyuanImage-3.0.git
+
 git clone https://github.com/openvla/openvla.git
 
 git clone https://github.com/Physical-Intelligence/openpi.git
 
 git clone https://github.com/coqui-ai/TTS.git
+
+git clone https://github.com/harry0703/MoneyPrinterTurbo.git
 
 ## 1.4 nlp
 
@@ -235,6 +243,8 @@ git clone https://github.com/unslothai/unsloth.git
 git clone https://github.com/google/gemma.cpp.git
 
 git clone https://github.com/google/gemma_pytorch.git
+
+git clone https://github.com/QwenLM/Qwen.git
 
 ## 1.6 rag
 
