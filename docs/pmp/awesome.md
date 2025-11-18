@@ -348,6 +348,8 @@ git clone https://github.com/jbeder/yaml-cpp.git
 
 git clone https://github.com/benhoyt/inih.git
 
+wget https://github.com/Tencent/rapidjson/archive/v1.1.0.zip
+
 ### 4.1.3 log
 
 git clone https://github.com/google/glog.git
