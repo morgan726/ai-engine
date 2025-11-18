@@ -86,6 +86,8 @@ git clone https://github.com/Meituan-AutoML/Twins.git
 
 ### 1.2.3 detection
 
+1.2.3.1 rcnn
+
 git clone https://github.com/rbgirshick/rcnn.git
 
 git clone https://github.com/rbgirshick/fast-rcnn.git
@@ -93,6 +95,8 @@ git clone https://github.com/rbgirshick/fast-rcnn.git
 git clone https://github.com/rbgirshick/py-faster-rcnn.git
 
 git clone https://github.com/aim-uofa/AdelaiDet.git
+
+1.2.3.2 yolo
 
 git clone https://github.com/tanjeffreyz/yolo-v1.git
 
@@ -124,9 +128,13 @@ git clone https://github.com/THU-MIG/yolov10.git
 
 git clone https://github.com/sunsmarterjie/yolov12.git
 
-git clone https://github.com/facebookresearch/detr.git
-
 git clone https://github.com/THU-MIG/yoloe.git
+
+git clone https://github.com/AILab-CVC/YOLO-World.git
+
+1.2.3.3 detr
+
+git clone https://github.com/facebookresearch/detr.git
 
 ### 1.2.4 segmentation
 
@@ -215,6 +223,8 @@ git clone https://github.com/OpenInterpreter/open-interpreter.git
 git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git
 
 git clone https://github.com/Stability-AI/generative-models.git
+
+git clone https://github.com/modelscope/DiffSynth-Studio.git
 
 git clone https://github.com/hpcaitech/Open-Sora.git
 
