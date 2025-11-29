@@ -214,11 +214,7 @@ git clone https://github.com/HuCaoFighting/Swin-Unet.git
 
 ## 1.3 bm
 
-git clone https://github.com/google-deepmind/alphafold.git
-
-git clone https://github.com/deepseek-ai/DeepSeek-R1.git
-
-git clone https://github.com/OpenInterpreter/open-interpreter.git
+### 1.3.1 img
 
 git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git
 
@@ -230,19 +226,13 @@ git clone https://github.com/hpcaitech/Open-Sora.git
 
 git clone https://github.com/Tencent-Hunyuan/HunyuanImage-3.0.git
 
-git clone https://github.com/openvla/openvla.git
-
-git clone https://github.com/Physical-Intelligence/openpi.git
-
-git clone https://github.com/coqui-ai/TTS.git
-
 git clone https://github.com/harry0703/MoneyPrinterTurbo.git
 
-## 1.4 nlp
+### 1.3.2 llm
 
-git clone https://github.com/graykode/nlp-tutorial.git
+git clone https://github.com/deepseek-ai/DeepSeek-R1.git
 
-## 1.5 llm
+git clone https://github.com/OpenInterpreter/open-interpreter.git
 
 git clone https://github.com/THUDM/ChatGLM-6B.git
 
@@ -256,7 +246,37 @@ git clone https://github.com/google/gemma_pytorch.git
 
 git clone https://github.com/QwenLM/Qwen.git
 
-## 1.6 rag
+### 1.3.3 fold
+
+git clone https://github.com/google-deepmind/alphafold.git
+
+### 1.3.4 vl
+
+git clone https://github.com/openvla/openvla.git
+
+git clone https://github.com/Physical-Intelligence/openpi.git
+
+### 1.3.5 rag
+
+git clone https://github.com/infiniflow/ragflow.git
+
+### 1.3.6 audio
+
+git clone https://github.com/coqui-ai/TTS.git
+
+## 1.4 nlp
+
+git clone https://github.com/graykode/nlp-tutorial.git
+
+## 1.5 slam
+
+### 1.5.1 vslam
+
+git clone https://github.com/rpng/open_vins.git
+
+### 1.5.2 bev
+
+git clone https://github.com/fundamentalvision/BEVFormer.git
 
 # 2 code
 
@@ -357,6 +377,8 @@ git clone https://github.com/zeux/pugixml.git
 git clone https://github.com/jbeder/yaml-cpp.git
 
 git clone https://github.com/benhoyt/inih.git
+
+wget https://github.com/Tencent/rapidjson/archive/v1.1.0.zip
 
 ### 4.1.3 log
 
