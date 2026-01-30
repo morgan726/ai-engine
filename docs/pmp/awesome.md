@@ -220,6 +220,8 @@ git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git
 
 git clone https://github.com/Stability-AI/generative-models.git
 
+git clone https://github.com/OpenTalker/SadTalker.git
+
 git clone https://github.com/modelscope/DiffSynth-Studio.git
 
 git clone https://github.com/hpcaitech/Open-Sora.git
