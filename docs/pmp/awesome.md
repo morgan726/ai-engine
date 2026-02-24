@@ -46,6 +46,8 @@ git clone https://github.com/cvat-ai/cvat.git
 
 git clone https://github.com/OschAI/VisioFirm.git
 
+git clone https://github.com/HumanSignal/label-studio.git
+
 ## 1.2 cv
 
 ### 1.2.0 tutorial
