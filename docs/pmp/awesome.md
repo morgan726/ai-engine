@@ -8,7 +8,7 @@ git clone https://github.com/huggingface/transformers.git
 
 git clone https://github.com/hyunwoongko/transformer.git
 
-git clone git clone https://github.com/Dao-AILab/flash-attention
+git clone https://github.com/Dao-AILab/flash-attention
 
 git clone https://github.com/openai/CLIP.git
 
@@ -423,6 +423,8 @@ git clone https://github.com/feder-cr/Jobs_Applier_AI_Agent_AIHawk.git
 ## 4.3 system
 
 git clone https://github.com/torvalds/linux.git
+
+git clone https://github.com/ApolloAuto/apollo.git
 
 git clone https://github.com/ros/ros.git
 
