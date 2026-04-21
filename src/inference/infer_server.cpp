@@ -264,18 +264,12 @@ void InferServer::DiscardTask(Session_t session, const std::string& tag) noexcep
 }
 
 bool InferServer::SetModelDir(const std::string& model_dir) noexcept {
-  // // check whether model dir exist
-  // if (access(model_dir.c_str(), F_OK) == 0) {
-  //   ModelManager::Instance()->SetModelDir(model_dir);
-  //   return true;
-  // }
-  // return false;
+  (void)model_dir;
+  return false;
 }
 
 void InferServer::LoadModel() noexcept {
-  std::string modelTxt = "/workspace/weights/mssd/MobileNetSSD_deploy.prototxt";
-  std::string modelBin = "/workspace/weights/mssd/MobileNetSSD_deploy.caffemodel";
-  net = cv::dnn::readNetFromCaffe(modelTxt, modelBin);
+  // stub: NVIDIA TRT/CPU build does not preload OpenCV DNN here
   return;
 }
 
@@ -304,3 +298,4 @@ ThroughoutStatistic InferServer::GetThroughout(Session_t session, const std::str
 #endif
 
 }  // namespace infer_server
+// Remove static Net usage for non-Cambricon builds

@@ -17,6 +17,9 @@ endif()
 
 add_subdirectory(src/model)
 
+# Priority scheduler (producer-consumer, strategy/command, observer, singleton)
+add_subdirectory(src/scheduler)
+
 include_directories("${CMAKE_SOURCE_DIR}/src" "${CMAKE_SOURCE_DIR}/include")
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake ${CMAKE_CURRENT_SOURCE_DIR}/cmake/sanitizers)
 find_package(Sanitizers)

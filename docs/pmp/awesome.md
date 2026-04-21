@@ -178,6 +178,12 @@ git clone https://github.com/XiandaGuo/OpenStereo.git
 
 git clone https://github.com/princeton-vl/RAFT-Stereo.git
 
+git clone https://github.com/cdcseacave/openMVS.git
+
+git clone https://github.com/NVlabs/Fast-FoundationStereo.git
+
+git clone https://github.com/3D-Vision-World/awesome-NeRF-and-3DGS-SLAM.git
+
 ### 1.2.6 generation
 
 git clone https://github.com/yfeng95/GAN.git
@@ -198,7 +204,7 @@ git clone https://github.com/microsoft/human-pose-estimation.pytorch.git
 
 git clone https://github.com/orhir/PoseAnything.git
 
-### 1.2.8 3D
+### 1.2.8 3d
 
 git clone https://github.com/charlesq34/pointnet.git
 
@@ -207,6 +213,8 @@ git clone https://github.com/charlesq34/pointnet2.git
 git clone https://github.com/sshaoshuai/PointRCNN.git
 
 git clone https://github.com/yanx27/Pointnet_Pointnet2_pytorch.git
+
+git clone https://github.com/open-mmlab/OpenPCDet.git
 
 ### 1.2.9 sod
 
@@ -254,7 +262,7 @@ git clone https://github.com/QwenLM/Qwen.git
 
 git clone https://github.com/google-deepmind/alphafold.git
 
-### 1.3.4 vl
+### 1.3.4 vla
 
 git clone https://github.com/openvla/openvla.git
 
@@ -278,9 +286,19 @@ git clone https://github.com/graykode/nlp-tutorial.git
 
 git clone https://github.com/rpng/open_vins.git
 
+git clone https://github.com/HKUST-Aerial-Robotics/VINS-Fusion.git
+
+git clone https://github.com/ros-navigation/navigation2.git
+
 ### 1.5.2 bev
 
+git clone https://github.com/HuangJunJie2017/BEVDet.git
+
 git clone https://github.com/fundamentalvision/BEVFormer.git
+
+git clone https://github.com/wzzheng/TPVFormer.git
+
+git clone https://github.com/autonomousvision/occupancy_networks.git
 
 # 2 code
 

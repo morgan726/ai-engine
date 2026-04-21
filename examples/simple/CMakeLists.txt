@@ -34,25 +34,29 @@ list(APPEND Examples_LINK_LIBS yuv)
 # ---[ Threads and other system libraries
 list(APPEND Examples_LINK_LIBS pthread dl)
 
-message(STATUS "@@@@@@@@@@@ Target : detection")
+option(BUILD_DETECTION "Build detection example that pulls Cambricon-specific pieces" OFF)
+message(STATUS "@@@@@@@@@@@ Target : detection (BUILD_DETECTION=${BUILD_DETECTION})")
 
 # ---[ Detection executable
-file(GLOB detection_srcs "${CMAKE_CURRENT_SOURCE_DIR}/detection.cpp")
-file(GLOB_RECURSE detection_srcs_sub "${CMAKE_CURRENT_SOURCE_DIR}/../../src/**/*.cpp")
+if(BUILD_DETECTION)
+  file(GLOB detection_srcs "${CMAKE_CURRENT_SOURCE_DIR}/detection.cpp")
+  file(GLOB_RECURSE detection_srcs_sub "${CMAKE_CURRENT_SOURCE_DIR}/../../src/**/*.cpp")
+  list(APPEND detection_srcs ${detection_srcs_sub})
+  add_executable(detection ${detection_srcs})
+  add_sanitizers(detection)
+  target_compile_options(detection PRIVATE ${COMPILE_FLAGS})
+  target_include_directories(detection PRIVATE ${Examples_INCLUDE_DIRS})
+  target_link_libraries(detection ${Examples_LINK_LIBS})
+  install(TARGETS detection RUNTIME DESTINATION bin)
+endif()
 
-list(APPEND detection_srcs ${detection_srcs_sub})
-
-add_executable(detection ${detection_srcs})
-add_sanitizers(detection)
-
-# Apply compile flags to the detection target
-target_compile_options(detection PRIVATE ${COMPILE_FLAGS})
-
-# Define include directories and link libraries for the 'detection' executable
-target_include_directories(detection PRIVATE
-  ${Examples_INCLUDE_DIRS}
-)
-target_link_libraries(detection ${Examples_LINK_LIBS})
-
-# Install the detection executable to the specified binary folder
-install(TARGETS detection RUNTIME DESTINATION bin)
+message(STATUS "@@@@@@@@@@@ Target : priority_demo")
+file(GLOB priority_demo_srcs "${CMAKE_CURRENT_SOURCE_DIR}/priority_demo.cpp")
+file(GLOB_RECURSE priority_demo_srcs_sub "${CMAKE_CURRENT_SOURCE_DIR}/../../src/**/*.cpp")
+list(APPEND priority_demo_srcs ${priority_demo_srcs_sub})
+add_executable(priority_demo ${priority_demo_srcs})
+add_sanitizers(priority_demo)
+target_compile_options(priority_demo PRIVATE ${COMPILE_FLAGS})
+target_include_directories(priority_demo PRIVATE ${Examples_INCLUDE_DIRS})
+target_link_libraries(priority_demo ${Examples_LINK_LIBS} ai_priority)
+install(TARGETS priority_demo RUNTIME DESTINATION bin)

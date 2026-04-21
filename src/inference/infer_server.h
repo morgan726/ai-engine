@@ -14,7 +14,6 @@
 #include "shape.h"
 #include "utils/any.h"
 #include "utils/base_object.h"
-#include <opencv2/dnn.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 namespace infer_server {
@@ -728,7 +727,6 @@ class InferServer {
   InferServer() = delete;
   InferServerPrivate* priv_;
 public:
-  static cv::dnn::Net net;
 };  // class InferServer
 
 }  // namespace infer_server
