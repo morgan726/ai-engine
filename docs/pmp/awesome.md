@@ -138,6 +138,7 @@ git clone https://github.com/AILab-CVC/YOLO-World.git
 
 git clone https://github.com/facebookresearch/detr.git
 
+
 ### 1.2.4 segmentation
 
 git clone https://github.com/matterport/Mask_RCNN.git
