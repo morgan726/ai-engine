@@ -138,7 +138,6 @@ git clone https://github.com/AILab-CVC/YOLO-World.git
 
 git clone https://github.com/facebookresearch/detr.git
 
-
 ### 1.2.4 segmentation
 
 git clone https://github.com/matterport/Mask_RCNN.git
@@ -284,6 +283,8 @@ git clone https://github.com/graykode/nlp-tutorial.git
 ## 1.5 slam
 
 ### 1.5.1 vslam
+
+git clone https://github.com/UZ-SLAMLab/ORB_SLAM3.git
 
 git clone https://github.com/rpng/open_vins.git
 

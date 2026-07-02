@@ -5,7 +5,7 @@ RUN sed -i 's/archive.ubuntu.com/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/source
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt update && \
-    apt install -y git pkgconf ninja-build ccache libssl-dev wget libgoogle-glog-dev libglib2.0-dev && \
+    apt install -y ca-certificates git pkgconf ninja-build ccache libssl-dev wget libgoogle-glog-dev libglib2.0-dev && \
     rm -rf /var/lib/apt/lists/*
 
 RUN cd /tmp && \
@@ -68,10 +68,10 @@ RUN apt update && \
 
 # Intel
 RUN cd /tmp && \
-    wget https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB && \
-    apt-key add GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB && \
+    wget https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB --no-check-certificate && \
+    gpg --dearmor -o /usr/share/keyrings/intel-archive.gpg GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB && \
     rm -rf /tmp/*
-RUN echo "deb https://apt.repos.intel.com/openvino/2022 bionic main" | tee /etc/apt/sources.list.d/intel-openvino-2022.list && \
+RUN echo "deb [signed-by=/usr/share/keyrings/intel-archive.gpg] https://apt.repos.intel.com/openvino/2022 focal main" | tee /etc/apt/sources.list.d/intel-openvino-2022.list && \
     apt update && \
     apt install -y openvino-2022.1.0 openvino-opencv && \
     rm -rf /var/lib/apt/lists/*
