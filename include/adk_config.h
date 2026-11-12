@@ -4,7 +4,7 @@
 #include <string>
 
 #define ADK_VERSION_MAJOR 0
-#define ADK_VERSION_MINOR 1
+#define ADK_VERSION_MINOR 2
 #define ADK_VERSION_PATCH 0
 
 #define ADK_GET_VERSION(major, minor, patch) (((major) << 20) | ((minor) << 10) | (patch))

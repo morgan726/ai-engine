@@ -47,7 +47,9 @@ struct TimeEvent {
 };
 
 struct EventCompare {
-  bool operator()(const TimeEvent* lhs, const TimeEvent* rhs) { return lhs->alarm_time < rhs->alarm_time; }
+  bool operator()(const TimeEvent* lhs, const TimeEvent* rhs) const {
+    return lhs->alarm_time < rhs->alarm_time;
+  }
 };
 
 class TimeCounter {

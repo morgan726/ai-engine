@@ -1,0 +1,13 @@
+.git
+.gitmodules
+.vscode
+.codex
+build
+build-*
+cmake-build-*
+docs
+data
+weights
+*.pdf
+__pycache__
+*.pyc

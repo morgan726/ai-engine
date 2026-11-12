@@ -58,7 +58,7 @@ struct Task {
      * @retval true If lhs.priority < rhs.priority
      * @retval false Otherwise
      */
-    bool operator()(const Task &lhs, const Task &rhs) { return lhs.priority < rhs.priority; }
+    bool operator()(const Task &lhs, const Task &rhs) const noexcept { return lhs.priority < rhs.priority; }
   };
 };
 
@@ -170,7 +170,12 @@ class ThreadPool {
     VLOG(4) << "[EasyDK InferServer] [ThreadPool] Thread pool (idle/total): " << IdleNumber() << " / " << Size();
     auto pck = std::make_shared<std::packaged_task<typename std::result_of<callable(arguments...)>::type()>>(
         std::bind(std::forward<callable>(f), std::forward<arguments>(args)...));
-    task_q_.Emplace([pck]() { (*pck)(); }, priority);
+    {
+      // Pair enqueue with the worker's condition-variable predicate so a
+      // notification cannot be lost between checking the queue and waiting.
+      std::lock_guard<std::mutex> lock(mutex_);
+      task_q_.Emplace([pck]() { (*pck)(); }, priority);
+    }
     cv_.notify_one();
     return pck->get_future();
   }
@@ -190,7 +195,10 @@ class ThreadPool {
   void VoidPush(int64_t priority, callable &&f, arguments &&... args) {
     VLOG(4) << "[EasyDK InferServer] [ThreadPool] Sumbit one task to threadpool, priority: " << priority;
     VLOG(4) << "[EasyDK InferServer] [ThreadPool] Thread pool (idle/total): " << IdleNumber() << " / " << Size();
-    task_q_.Emplace(std::bind(std::forward<callable>(f), std::forward<arguments>(args)...), priority);
+    {
+      std::lock_guard<std::mutex> lock(mutex_);
+      task_q_.Emplace(std::bind(std::forward<callable>(f), std::forward<arguments>(args)...), priority);
+    }
     cv_.notify_one();
   }
 

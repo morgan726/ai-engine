@@ -1,0 +1,24 @@
+# DeepStream is kept in a separate image because NVIDIA ships its own CUDA,
+# TensorRT and GStreamer compatibility matrix.  Override DEEPSTREAM_TAG when
+# the host driver requires another supported release.
+ARG DEEPSTREAM_TAG=7.1-gc-triton-devel
+FROM nvcr.io/nvidia/deepstream:${DEEPSTREAM_TAG}
+
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential cmake ninja-build git pkg-config ca-certificates \
+    libgoogle-glog-dev libgflags-dev libopencv-dev libavcodec-dev \
+    libavformat-dev libavutil-dev libswscale-dev libswresample-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /workspace
+COPY . /workspace
+
+RUN cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release \
+    -DADK_BUILD_TRT_YOLO=OFF -DADK_BUILD_MSSD=ON \
+    -DADK_BUILD_EXAMPLES=ON -DADK_BUILD_TESTS=OFF \
+    -DAI_ENABLE_OPENVINO=OFF -DAI_BUILD_TENSORRT_BACKEND=ON \
+    && cmake --build build -j"$(nproc)" --target backend_probe scheduler_probe mssd priority_demo
+
+ENV NVIDIA_DRIVER_CAPABILITIES=compute,utility,video,graphics
+CMD ["/bin/bash"]
