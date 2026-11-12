@@ -16,9 +16,11 @@
 namespace ai {
 namespace inference {
 
-// Request scheduler backed by the project's priority thread pool. Each pool
-// worker creates one private backend instance, so TensorRT execution contexts
-// and CUDA streams are never shared by concurrent requests.
+// Request scheduler backed by the project's priority thread pool.  A request
+// carries its own BackendConfig, so one queue can dispatch CPU, OpenVINO and
+// TensorRT work at the same time.  Each pool worker keeps a private cache of
+// backend instances; model contexts and CUDA streams are therefore never
+// shared by concurrent requests, and the cache is released with the worker.
 class InferenceScheduler final {
  public:
   struct Options {
@@ -30,6 +32,10 @@ class InferenceScheduler final {
   struct Request {
     uint64_t id{0};
     int64_t priority{0};
+    // A request with the default kAuto/empty model uses Options::backend as
+    // its fallback.  Set this field explicitly to route the request to a
+    // particular hardware SDK and model.
+    BackendConfig backend;
     std::vector<Tensor> inputs;
   };
 

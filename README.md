@@ -41,12 +41,24 @@ docker run --rm -it --gpus all --net=host \
 
 ## 线程池运行
 
-`InferenceScheduler` 使用项目的 `PriorityThreadPool` 调度请求，数值较大的优先级先从等待队列取出；已经运行的任务不会被抢占。每个线程独占一个后端实例及其推理上下文，默认两个线程，可通过 `Options::workers` 调整。`Submit` 返回 `future`，可取得状态和输出；`Shutdown(true)` 等待已提交的任务完成，`Shutdown(false)` 取消尚未开始的任务。动态组批、序列任务和跨模型的资源隔离仍未实现。
+`InferenceScheduler` 使用项目的 `PriorityThreadPool` 调度请求，数值较大的优先级先从等待队列取出；已经运行的任务不会被抢占。每个 `Request` 可以携带自己的 `BackendConfig`，因此同一个队列可以路由 CPU、Intel OpenVINO 和 NVIDIA TensorRT。每个线程按配置懒加载并独占后端实例及其推理上下文，默认两个线程，可通过 `Options::workers` 调整。`Submit` 返回 `future`，可取得状态和输出；`Shutdown(true)` 等待已提交的任务完成，`Shutdown(false)` 让尚未开始的任务返回取消状态。动态组批和序列任务仍未实现；不同模型或 SDK 会在每个 worker 中各保留一份实例，增加线程数会增加内存或显存占用。
 
-先验证线程池（以下 CPU reference 后端只复制张量，用于验证调度，并非模型推理）：
+先验证异构线程池路由：探针按 CPU、OpenVINO、TensorRT 轮换请求。未设置模型环境变量时，CPU 请求成功，两个厂商请求会返回模型加载错误，但仍会显示 SDK 路由；这用于检查调度路径，不代表厂商模型推理成功。
 
 ```bash
 docker run --rm --gpus all ai-engine-trt /workspace/build/bin/scheduler_probe 2 10
+```
+
+给探针提供真实模型时，使用 `AI_ENGINE_OPENVINO_MODEL`、`AI_ENGINE_OPENVINO_DEVICE`、`AI_ENGINE_TENSORRT_MODEL` 和 `AI_ENGINE_TENSORRT_DEVICE`；输入张量仍需与模型签名匹配：
+
+```bash
+docker run --rm --gpus all \
+  -e AI_ENGINE_OPENVINO_MODEL=/workspace/models/model.xml \
+  -e AI_ENGINE_OPENVINO_DEVICE=CPU \
+  -e AI_ENGINE_TENSORRT_MODEL=/workspace/models/model.engine \
+  -e AI_ENGINE_TENSORRT_DEVICE=0 \
+  -v "$PWD/models":/workspace/models:ro \
+  ai-engine-trt /workspace/build/bin/scheduler_probe 2 12
 ```
 
 运行实际的 MSSD 图片检测，两个线程处理四次请求，结果保存在宿主机 `output/`：
@@ -61,7 +73,7 @@ docker run --rm --gpus all \
   /workspace/build/bin/mssd /workspace/data/image/dog.jpg 2 4
 ```
 
-命令最后两个数字分别是线程数和请求数；多请求产生 `output_0.jpg` 等文件。MSSD 示例目前使用 OpenCV DNN 默认 CPU 后端，`--gpus all` 不意味着它使用 TensorRT。真实 OpenVINO/TensorRT 模型需通过 `InferenceScheduler` 配置模型路径，并按照模型的输入类型和 shape 构造张量；`backend_probe` 只检查运行时和工厂是否存在。每个 worker 都加载一份模型，增大线程数会增加内存或显存占用，应实测吞吐量后调整。
+命令最后两个数字分别是线程数和请求数；多请求产生 `output_0.jpg` 等文件。MSSD 示例目前使用 OpenCV DNN 默认 CPU 后端，`--gpus all` 不意味着它使用 TensorRT。真实 OpenVINO/TensorRT 模型需通过 `InferenceScheduler` 配置模型路径，并按照模型的输入类型和 shape 构造张量；`backend_probe` 只检查运行时和工厂是否存在。每个 worker 都可能加载每种配置的一份模型，增大线程数会增加内存或显存占用，应实测吞吐量后调整。
 
 ## 本地无 GPU 编译检查
 
