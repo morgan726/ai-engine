@@ -26,6 +26,17 @@ if(OpenCV_FOUND AND GLOG_FOUND AND TARGET ai_inference_backend)
     ${CMAKE_DL_LIBS})
   target_compile_features(trt_scheduler_demo PRIVATE cxx_std_17)
   install(TARGETS trt_scheduler_demo RUNTIME DESTINATION bin)
+
+  add_executable(trt_model_runner
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../tools/trt_model_runner.cpp)
+  target_include_directories(trt_model_runner PRIVATE
+    ${OpenCV_INCLUDE_DIRS} ${GLOG_INCLUDE_DIRS}
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../src ${CMAKE_CURRENT_SOURCE_DIR}/../../include)
+  target_link_libraries(trt_model_runner PRIVATE
+    ai_inference_backend ai_runtime ${OpenCV_LIBS} ${GLOG_LIBRARIES}
+    ${CMAKE_DL_LIBS})
+  target_compile_features(trt_model_runner PRIVATE cxx_std_17)
+  install(TARGETS trt_model_runner RUNTIME DESTINATION bin)
 else()
   message(STATUS "trt_scheduler_demo disabled: OpenCV, glog and inference backend are required")
 endif()

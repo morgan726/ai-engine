@@ -83,3 +83,5 @@ if(ADK_BUILD_EXAMPLES)
 endif()
 
 install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/include/adk_config.h DESTINATION include)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/configs/tensorrt_models.conf
+        DESTINATION share/ai-engine)

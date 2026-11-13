@@ -43,7 +43,7 @@ RUN cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release \
       -DADK_BUILD_EXAMPLES=ON -DADK_BUILD_TESTS=OFF \
       -DADK_CUDA_ARCHITECTURES=${CUDA_ARCHITECTURES} \
       -DAI_ENABLE_OPENVINO=ON -DAI_BUILD_TENSORRT_BACKEND=ON && \
-    cmake --build build -j"$(nproc)" --target backend_probe scheduler_probe trt_scheduler_demo mssd priority_demo && \
+    cmake --build build -j"$(nproc)" --target backend_probe scheduler_probe trt_scheduler_demo trt_model_runner mssd priority_demo && \
     if [ "${BUILD_TRT_YOLO}" = "ON" ]; then cmake --build build -j"$(nproc)" --target trt_yolo; fi && \
     build/bin/backend_probe
 

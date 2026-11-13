@@ -83,6 +83,37 @@ docker run --rm --gpus all \
 
 然后把 `yolov5s-trt10.engine` 传给 `trt_scheduler_demo`。只有 `backend_probe` 输出 `tensorrt runtime=yes factory=yes` 只能说明 SDK 已加载，不能代表具体 plan 可以反序列化；`trt_scheduler_demo` 返回 `status=success` 才表示真正完成了 TensorRT 推理。
 
+### 多模型 TensorRT 目录
+
+`configs/tensorrt_models.conf` 集中登记了你列出的分类、检测、分割、深度、姿态、特征匹配、3D/BEV、OCR 和 NLP 模型。每行记录任务类型、engine 路径、输入类型、输入 shape、数据类型、归一化系数和 NCHW/NHWC 布局。目录中的三个 `yolov5s_*` 是仓库已有的 serialized plan；其余模型需要先由对应的 ONNX/权重生成与当前 TensorRT、CUDA 驱动和 GPU 架构匹配的 `.engine`，目录不会把权重文件误当成可加载的 plan。
+
+用 `trt_model_runner` 查看目录和 engine 是否存在：
+
+```bash
+docker run --rm --gpus all \
+  --mount type=bind,src="$PWD/configs",dst=/workspace/configs,readonly \
+  --mount type=bind,src="$PWD/weights",dst=/workspace/weights,readonly \
+  ai-engine-trt /workspace/build/bin/trt_model_runner --list
+```
+
+单模型和多模型任务都走同一个优先级线程池。多个 `--job` 会在同一调度器中按请求优先级排队；每个 worker 对每个 engine 保留自己的 TensorRT execution context，因此增加 worker 会按模型数增加显存占用：
+
+```bash
+docker run --rm --gpus all \
+  --mount type=bind,src="$PWD/configs",dst=/workspace/configs,readonly \
+  --mount type=bind,src="$PWD/weights",dst=/workspace/weights,readonly \
+  --mount type=bind,src="$PWD/data",dst=/workspace/data,readonly \
+  ai-engine-trt \
+  /workspace/build/bin/trt_model_runner \
+  --job yolov5s_fp16=/workspace/data/image/dog.jpg \
+  --job resnet50=/workspace/data/image/dog.jpg \
+  --workers 2 --requests 1 --device-id 0
+```
+
+`image` 条目由入口完成 resize、RGB 转换、归一化和布局打包；`tensor` 条目要求输入文件是与目录中 shape/type 完全一致的原始二进制 tensor，适合 PointNet、BERT、BEV 等由上层完成点云或 tokenizer 预处理的模型。入口只打印原始输出 tensor，检测框解码、分割 mask、OCR 解码和 NLP tokenizer 应放在对应 Runner/Processor 中。
+
+Haar/Gabor/LBP/SIFT/HOG/SURF、SGM/ADCensus、传统 n-gram、VINS 主流程等不是 TensorRT engine，应继续由 OpenCV/CUDA/CPU pipeline 处理；LLM、扩散模型、SadTalker 等多阶段模型需要 TensorRT-LLM 或专用 pipeline，不能仅靠这个单输入 TensorRT adapter 代替。
+
 运行实际的 MSSD 图片检测，两个线程处理四次请求，结果保存在宿主机 `output/`：
 
 ```bash
