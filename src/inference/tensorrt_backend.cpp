@@ -4,6 +4,9 @@
 #include <cuda_runtime_api.h>
 
 #include <fstream>
+#include <cstring>
+#include <cstdint>
+#include <iostream>
 #include <limits>
 #include <memory>
 #include <mutex>
@@ -17,7 +20,10 @@ namespace {
 class Logger final : public nvinfer1::ILogger {
  public:
   void log(Severity severity, const char* message) noexcept override {
-    if (severity <= Severity::kWARNING) last_message_ = message == nullptr ? "" : message;
+    if (severity <= Severity::kWARNING) {
+      last_message_ = message == nullptr ? "" : message;
+      if (severity <= Severity::kERROR) std::cerr << "[TensorRT] " << last_message_ << '\n';
+    }
   }
   std::string last_message_;
 };
@@ -41,6 +47,94 @@ struct Destroyer {
 using RuntimePtr = std::unique_ptr<nvinfer1::IRuntime, Destroyer<nvinfer1::IRuntime>>;
 using EnginePtr = std::unique_ptr<nvinfer1::ICudaEngine, Destroyer<nvinfer1::ICudaEngine>>;
 using ContextPtr = std::unique_ptr<nvinfer1::IExecutionContext, Destroyer<nvinfer1::IExecutionContext>>;
+
+#if defined(NV_TENSORRT_MAJOR) && NV_TENSORRT_MAJOR >= 10
+// TensorRT 10 rejects the legacy blob overload for some plans produced by
+// TensorRT 8/9.  The stream reader path is the forward-compatible API and
+// also avoids an extra copy inside the runtime.
+#if defined(NV_TENSORRT_MINOR) && NV_TENSORRT_MINOR >= 7
+class PlanReader final : public nvinfer1::IStreamReaderV2 {
+ public:
+  explicit PlanReader(const std::vector<char>& data) : data_(data) {}
+
+  int64_t read(void* destination, int64_t bytes, cudaStream_t stream) noexcept override {
+    if (destination == nullptr || bytes < 0 || offset_ > data_.size() ||
+        static_cast<uint64_t>(bytes) > data_.size() - offset_) {
+      return -1;
+    }
+    if (bytes != 0) {
+      cudaPointerAttributes attributes{};
+      const cudaError_t pointer_status = cudaPointerGetAttributes(&attributes, destination);
+      if (pointer_status == cudaSuccess &&
+          (attributes.type == cudaMemoryTypeDevice || attributes.type == cudaMemoryTypeManaged)) {
+        if (cudaMemcpyAsync(destination, data_.data() + offset_, static_cast<size_t>(bytes),
+                            cudaMemcpyHostToDevice, stream) != cudaSuccess) {
+          return -1;
+        }
+      } else {
+        // cudaPointerGetAttributes returns an error for ordinary host memory;
+        // clear it before using the host copy path.
+        cudaGetLastError();
+        std::memcpy(destination, data_.data() + offset_, static_cast<size_t>(bytes));
+      }
+    }
+    offset_ += static_cast<size_t>(bytes);
+    return bytes;
+  }
+
+  bool seek(int64_t offset, nvinfer1::SeekPosition where) noexcept override {
+    int64_t base = 0;
+    if (where == nvinfer1::SeekPosition::kCUR) {
+      if (offset_ > static_cast<size_t>(std::numeric_limits<int64_t>::max())) return false;
+      base = static_cast<int64_t>(offset_);
+    } else if (where == nvinfer1::SeekPosition::kEND) {
+      if (data_.size() > static_cast<size_t>(std::numeric_limits<int64_t>::max())) return false;
+      base = static_cast<int64_t>(data_.size());
+    } else if (where != nvinfer1::SeekPosition::kSET) {
+      return false;
+    }
+    uint64_t position = 0;
+    if (offset < 0) {
+      const uint64_t magnitude = static_cast<uint64_t>(-(offset + 1)) + 1U;
+      if (magnitude > static_cast<uint64_t>(base)) return false;
+      position = static_cast<uint64_t>(base) - magnitude;
+    } else {
+      if (static_cast<uint64_t>(offset) >
+          static_cast<uint64_t>(std::numeric_limits<int64_t>::max()) - static_cast<uint64_t>(base)) {
+        return false;
+      }
+      position = static_cast<uint64_t>(base) + static_cast<uint64_t>(offset);
+    }
+    if (position > data_.size()) return false;
+    offset_ = static_cast<size_t>(position);
+    return true;
+  }
+
+ private:
+  const std::vector<char>& data_;
+  size_t offset_{0};
+};
+#else
+class PlanReader final : public nvinfer1::IStreamReader {
+ public:
+  explicit PlanReader(const std::vector<char>& data) : data_(data) {}
+
+  int64_t read(void* destination, int64_t bytes) override {
+    if (destination == nullptr || bytes < 0 || offset_ > data_.size() ||
+        static_cast<uint64_t>(bytes) > data_.size() - offset_) {
+      return -1;
+    }
+    if (bytes != 0) std::memcpy(destination, data_.data() + offset_, static_cast<size_t>(bytes));
+    offset_ += static_cast<size_t>(bytes);
+    return bytes;
+  }
+
+ private:
+  const std::vector<char>& data_;
+  size_t offset_{0};
+};
+#endif
+#endif
 
 struct DeviceBuffer {
   void* ptr{nullptr};
@@ -116,7 +210,12 @@ class TensorRTBackend final : public IInferenceBackend {
     if (cudaSetDevice(config.device_id) != cudaSuccess) return BackendStatus::kUnavailable;
     runtime_.reset(nvinfer1::createInferRuntime(logger_));
     if (!runtime_) return BackendStatus::kRuntimeError;
+#if defined(NV_TENSORRT_MAJOR) && NV_TENSORRT_MAJOR >= 10
+    PlanReader reader(plan);
+    engine_.reset(runtime_->deserializeCudaEngine(reader));
+#else
     engine_.reset(runtime_->deserializeCudaEngine(plan.data(), plan.size()));
+#endif
     if (!engine_) return BackendStatus::kRuntimeError;
     context_.reset(engine_->createExecutionContext());
     if (!context_ || cudaStreamCreate(&stream_) != cudaSuccess) {

@@ -61,6 +61,28 @@ docker run --rm --gpus all \
   ai-engine-trt /workspace/build/bin/scheduler_probe 2 12
 ```
 
+针对 YOLO TensorRT plan，可以直接使用线程池推理入口。它将图片缩放为 `1x3x640x640 FP32`，提交到 TensorRT 后端并打印原始输出 tensor：
+
+```bash
+docker run --rm --gpus all \
+  --mount type=bind,src="$PWD/weights",dst=/workspace/weights,readonly \
+  --mount type=bind,src="$PWD/data",dst=/workspace/data,readonly \
+  ai-engine-trt /workspace/build/bin/trt_scheduler_demo \
+  /workspace/weights/yolov5-6.0/yolov5s-kFLOAT-batch1.engine \
+  /workspace/data/image/dog.jpg 2 4 0
+```
+
+参数依次是 `engine 文件`、`图片`、`线程数`、`请求数`、`CUDA device_id`。每个 worker 会加载一份 TensorRT engine 和 execution context。这个 plan 必须使用与运行容器兼容的 TensorRT 版本和 GPU 架构生成；仓库中的示例 plan 显示由 TensorRT 8.6.1.6 生成，并包含 Ampere/Ada 的 SM 目标。在 TensorRT 10 容器或 RTX 5070 Ti（Compute Capability 12.0）上运行失败时，需要用当前容器的 `trtexec` 从 ONNX 重新生成：
+
+```bash
+/usr/src/tensorrt/bin/trtexec \
+  --onnx=/workspace/models/yolov5s.onnx \
+  --saveEngine=/workspace/models/yolov5s-trt10.engine \
+  --fp16
+```
+
+然后把 `yolov5s-trt10.engine` 传给 `trt_scheduler_demo`。只有 `backend_probe` 输出 `tensorrt runtime=yes factory=yes` 只能说明 SDK 已加载，不能代表具体 plan 可以反序列化；`trt_scheduler_demo` 返回 `status=success` 才表示真正完成了 TensorRT 推理。
+
 运行实际的 MSSD 图片检测，两个线程处理四次请求，结果保存在宿主机 `output/`：
 
 ```bash
